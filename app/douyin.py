@@ -45,7 +45,8 @@ class DouyinChat:
         await search.click()
         await search.fill("")
         await search.fill(name)
-        await self.page.wait_for_timeout(1_500)
+        await search.press("Enter")
+        await self.page.wait_for_timeout(3_500)
 
         result = await self._search_result(name)
         if result is None:
