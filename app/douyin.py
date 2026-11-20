@@ -81,6 +81,16 @@ class DouyinChat:
         # an exact name; only if none is found does pass 2 accept a group member
         # count suffix like "4161(7)" for target "4161". This ordering guarantees
         # "test" never returns "test(7)" or "test1".
+        # Fallback: click the visible text node whose exact text is the name.
+        try:
+            cand = self.page.get_by_text(name, exact=True)
+            for i in range(await cand.count()):
+                el = cand.nth(i)
+                if await el.is_visible():
+                    await el.click(force=True)
+                    return el
+        except Exception:
+            pass
         for index in range(await search_items.count()):
             item = search_items.nth(index)
             name_locator = await _visible_exact_text_locator(item, name_selectors, name)
