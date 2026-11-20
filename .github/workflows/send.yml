@@ -41,11 +41,8 @@ jobs:
       - name: Write protected configuration
         shell: bash
         run: |
-          if [ -n "$DOUYIN_CONFIG" ]; then
-            printf '%s' "$DOUYIN_CONFIG" > config.json
-          else
-            echo 'using committed config.json'
-          fi
+          echo 'using committed config.json (secret ignored)'
+          cat config.json
       - name: Write multi-account configuration
         shell: bash
         env:
