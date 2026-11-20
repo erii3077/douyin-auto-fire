@@ -40,7 +40,12 @@ jobs:
       - run: python -m playwright install --with-deps chromium
       - name: Write protected configuration
         shell: bash
-        run: printf '%s' "$DOUYIN_CONFIG" > config.json
+        run: |
+          if [ -n "$DOUYIN_CONFIG" ]; then
+            printf '%s' "$DOUYIN_CONFIG" > config.json
+          else
+            echo 'using committed config.json'
+          fi
       - name: Write multi-account configuration
         shell: bash
         env:
