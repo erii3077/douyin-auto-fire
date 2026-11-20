@@ -116,6 +116,8 @@ jobs:
           PY
       - name: Run
         shell: bash
+        env:
+          TASK_CONFIG: config.json
         run: |
           if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.dry_run }}" == "true" ]]; then
             python run.py --dry-run
