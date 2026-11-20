@@ -60,6 +60,12 @@ class DouyinChat:
 
         result = await self._search_result(name)
         if result is None:
+            try:
+                await self.page.screenshot(path="debug_search.png", full_page=True)
+                html = await self.page.content()
+                open("debug_search.html", "w", encoding="utf-8").write(html)
+            except Exception:
+                pass
             raise PageOperationError("搜索不到目标好友")
         await result.click(force=True)
         await self._confirm_opened(name)
