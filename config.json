@@ -2,7 +2,7 @@
   "task_id": "daily-streak",
   "timezone": "Asia/Shanghai",
   "friends": [
-    "站起来的七彩蟒蛇拔光你的腿毛磨粉喂你吃"
+    "吃饱先不睡呢"
   ],
   "messages": [
     {
@@ -13,6 +13,7 @@
   "stickers": {
     "续火花": {
       "label": "续火花",
+      "category": "常用",
       "fallback_index": 0
     }
   },
