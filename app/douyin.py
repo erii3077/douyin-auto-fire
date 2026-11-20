@@ -48,15 +48,17 @@ class DouyinChat:
         await self.page.wait_for_timeout(500)
         await search.type(name, delay=120)
         await self.page.wait_for_timeout(2_000)
-        await search.press("Enter")
-        await self.page.wait_for_timeout(2_500)
+        await self.page.wait_for_timeout(2_000)
         try:
-            first = self.page.locator('[class*="SearchPanel"]').first
-            if await first.count():
-                await first.click(timeout=1500)
+            await search.press("Enter")
         except Exception:
             pass
-        await self.page.wait_for_timeout(1_500)
+        await self.page.wait_for_timeout(4_000)
+        try:
+            await self.page.keyboard.press("Enter")
+        except Exception:
+            pass
+        await self.page.wait_for_timeout(4_000)
 
         result = await self._search_result(name)
         if result is None:
