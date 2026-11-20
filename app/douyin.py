@@ -86,6 +86,11 @@ class DouyinChat:
             name_locator = await _visible_exact_text_locator(item, name_selectors, name)
             if name_locator is None:
                 continue
+            try:
+                if await item.is_visible():
+                    return item
+            except Exception:
+                pass
             button = item.locator('[class*="SearchPanelitemchat_btn"]').first
             try:
                 if await button.count() and await button.is_visible():
