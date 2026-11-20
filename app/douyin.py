@@ -306,9 +306,18 @@ async def _has_exact_text(locators: Locator, expected: str) -> bool:
 
 async def _text_equals(locator: Locator, expected: str) -> bool:
     try:
-        return (await locator.inner_text(timeout=500)).strip() == expected
+        text = (await locator.inner_text(timeout=500)).strip()
     except Exception:
         return False
+    if text == expected:
+        return True
+    try:
+        attr = await locator.get_attribute("title", timeout=500)
+    except Exception:
+        attr = None
+    if attr and attr.strip() == expected:
+        return True
+    return False
 
 
 # Matches a group chat display name: the configured target name optionally
