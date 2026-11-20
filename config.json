@@ -1,0 +1,27 @@
+{
+  "task_id": "daily-streak",
+  "timezone": "Asia/Shanghai",
+  "friends": [
+    "站起来的七彩蟒蛇拔光你的腿毛磨粉喂你吃"
+  ],
+  "messages": [
+    {
+      "type": "sticker",
+      "value": "续火花"
+    }
+  ],
+  "stickers": {
+    "续火花": {
+      "label": "续火花",
+      "fallback_index": 0
+    }
+  },
+  "send_interval_seconds": {
+    "min": 3,
+    "max": 8
+  },
+  "continue_on_error": true,
+  "prevent_duplicates": false,
+  "target_open_retries": 1,
+  "target_open_timeout_seconds": 15
+}
