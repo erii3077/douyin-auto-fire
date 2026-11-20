@@ -121,6 +121,26 @@ class DouyinChat:
                 continue
 
         # The nickname node can be hidden while its conversation row is visible.
+        # Try to find the conversation row directly on the chat list page first.
+        try:
+            direct = self.page.get_by_text(name, exact=True)
+            count = await direct.count()
+            for i in range(count):
+                el = direct.nth(i)
+                try:
+                    if await el.is_visible():
+                        row = el.locator(
+                            "xpath=ancestor::*[contains(@class,'conversation')][1]"
+                        )
+                        target = row if await row.count() else el
+                        await target.scroll_into_view_if_needed(timeout=3000)
+                        await target.click(force=True)
+                        await self._confirm_opened(name)
+                        return target
+                except Exception:
+                    continue
+        except Exception:
+            pass
         # Locate and click the complete row instead of relying on text visibility.
         row_selectors = (
             '[data-e2e="conversation-item"]',
