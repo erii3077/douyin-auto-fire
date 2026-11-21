@@ -41,6 +41,19 @@ class DouyinChat:
         raise PageOperationError("打开聊天失败")
 
     async def _open_target_once(self, name: str) -> None:
+        for _ in range(3):
+            await self.page.wait_for_timeout(2500)
+            direct = await self._search_result(name)
+            if direct is not None:
+                break
+        if direct is not None:
+            try:
+                await direct.scroll_into_view_if_needed(timeout=3000)
+            except Exception:
+                pass
+            await direct.click(force=True)
+            await self._confirm_opened(name)
+            return
         search = await first_visible(self.page, SEARCH_INPUTS, self.timeout_ms)
         await search.click()
         await search.fill("")
@@ -82,6 +95,31 @@ class DouyinChat:
         # `SearchPanelitems` wrapper, whose descendants would then contain the
         # target name while `.first` returns another row's button. Scope to result
         # rows and require the matched name node and its button to be visible here.
+        # New PC chat layout: the left rail holds conversation rows whose only
+        # stable anchor is the visible nickname text. Walk every element whose
+        # own text is exactly the name, then climb to a clickable row ancestor.
+        try:
+            guess = self.page.get_by_text(name, exact=True)
+            n = await guess.count()
+            for i in range(n):
+                el = guess.nth(i)
+                try:
+                    if not await el.is_visible():
+                        continue
+                    box = await el.bounding_box()
+                    if box is None or box["x"] > 700:
+                        continue
+                    row = el.locator("xpath=ancestor::*[self::a or self::li or @role='listitem' or @role='button' or @data-e2e][1]")
+                    target = row if await row.count() else el
+                    await target.scroll_into_view_if_needed(timeout=3000)
+                    await target.click(force=True)
+                    await self._confirm_opened(name)
+                    return target
+                except Exception:
+                    continue
+        except Exception:
+            pass
+
         search_items = self.page.locator('[class*="SearchPanelitembox"], [class*="SearchPanelitem-box"], [class*="SearchPanelitem_box"]')
         name_selectors = (
             '[class*="SearchPanelitemtitle"]',
