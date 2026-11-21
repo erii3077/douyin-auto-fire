@@ -75,8 +75,7 @@ MESSAGE_CONFIRM_ANCHOR = "data-douyin-sender-anchor"
 # send states and would cause false failures.
 SEND_FAILURE_MARKERS = (
     "text=发送失败",
-    '[aria-label*="重试"]',
-    '[title*="重试"]',
+    "text=发送出错",
     '[class*="sendFailed"]',
     '[class*="SendFailed"]',
     '[class*="ContentSideSendStatusretry"]',
